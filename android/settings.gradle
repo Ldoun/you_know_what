@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name = "You_know_what"
