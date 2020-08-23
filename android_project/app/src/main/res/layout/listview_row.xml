@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/listview_row_background"
+        android:gravity="center"
+        android:padding="14dp"
+        android:layout_margin="8dp">
+        <TextView
+            android:id="@+id/replayTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="남극에선 감기에 걸리지 않습니다. 남극은 감기 바이러스도 살아갈 수 없기 때문입니다."
+            android:textSize="14dp"
+            android:textColor="#000000"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

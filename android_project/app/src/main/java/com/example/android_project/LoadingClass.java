@@ -25,7 +25,7 @@ public class LoadingClass extends Activity {
         imageView = findViewById(R.id.imageView);
 
         Animation appear;
-        appear = AnimationUtils.loadAnimation(this, R.anim.translate);
+        appear = AnimationUtils.loadAnimation(this, R.anim.fadein);
         imageView.setAnimation(appear);
 
 
@@ -37,6 +37,6 @@ public class LoadingClass extends Activity {
                 startActivity(intent);
                 finish();
             }
-        }, 5000);
+        }, 3000);
     }
 }
