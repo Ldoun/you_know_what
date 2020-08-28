@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnToggle:
                 if(btnToggle.isChecked()){
-                    setFrag(1);
+                    setFrag(2);
                     break;
                 }else{
-                    setFrag(2);
+                    setFrag(1);
                     break;
                 }
             case R.id.btn:

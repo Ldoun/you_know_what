@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_main">
+    android:background="@drawable/background">
 
 
     <Button
@@ -29,28 +29,32 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/btnReplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="버튼"
-            android:id="@+id/btnReplay"/>
+            android:layout_weight="1"
+            android:text="버튼" />
 
         <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="꺼짐"
-            android:textOn="켜짐"
-            android:id="@+id/btnToggle"/>
+            android:id="@+id/btnToggle"
+            android:layout_width="125dp"
+            android:layout_height="56dp"
+            android:background="@drawable/toggle_selector"
+            android:textOff=""
+            android:textOn="" />
 
         <Button
+            android:id="@+id/btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="버튼"
-            android:id="@+id/btn"/>
+            android:layout_weight="1"
+            android:text="버튼" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

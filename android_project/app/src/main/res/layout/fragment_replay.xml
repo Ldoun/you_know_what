@@ -17,7 +17,8 @@
             android:layout_marginTop="46dp"
             android:text="상식 다시보기"
             android:textColor="@color/colorTextDark"
-            android:textSize="25dp"
+            android:textSize="28dp"
+            android:fontFamily="@font/malgunbd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
