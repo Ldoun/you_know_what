@@ -37,7 +37,7 @@ public class speech_rec  extends AppCompatActivity {
     TextView textView;
     final int PERMISSION = 1;
     String data;
-    String ipv4address = "100.25.111.126";
+    String ipv4address = "54.210.63.142";
     String portnum = "5000";
     String postUrl = "http://" + ipv4address + ":" + portnum + "/";
     private String postBodyString;
