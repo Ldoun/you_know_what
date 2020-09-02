@@ -17,5 +17,3 @@ def get_NNG(sentence):
     for i in x:
         if 'NNG' in i:'''
     return x[0]
-
-print(get_NNG('강아지에 대해 궁금해졌어!'))
