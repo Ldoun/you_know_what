@@ -16,4 +16,4 @@ def get_NNG(sentence):
     '''print(x)
     for i in x:
         if 'NNG' in i:'''
-    return x[0]
+    return x
