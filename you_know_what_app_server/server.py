@@ -24,7 +24,7 @@ def handle_request():
     host='127.0.0.1',
     #db='stac_test'
     db='stac_server',
-    charset='utf-8'
+    charset='utf8'
     )
     cursor = stac.cursor()
 
