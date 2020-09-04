@@ -8,7 +8,7 @@ data=list(csv.reader(f))
 
 stac=pymysql.connect(
     user='stac',
-    passwd='1234',
+    passwd='',
     host='127.0.0.1',
     #db='stac_test'
     db='stac_server'
