@@ -19,7 +19,7 @@ def handle_request():
 
 
     stac=pymysql.connect(
-    user='root',
+    user='stac',
     passwd='1234',
     host='127.0.0.1',
     #db='stac_test'
@@ -27,7 +27,7 @@ def handle_request():
     )
     cursor = stac.cursor()
 
-    sql="select script from Tips where script LIKE '%"+subject+"%';"
+    sql="select script from tip where script LIKE '%"+subject+"%';"
     cursor.execute(sql)
     result = cursor.fetchall()
     tip=random.choice(result)[0]
