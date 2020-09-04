@@ -23,7 +23,8 @@ def handle_request():
     passwd='',
     host='127.0.0.1',
     #db='stac_test'
-    db='stac_server'
+    db='stac_server',
+    charset='utf-8'
     )
     cursor = stac.cursor()
 
