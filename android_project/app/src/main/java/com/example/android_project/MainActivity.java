@@ -1,20 +1,21 @@
 package com.example.android_project;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SettingFragment.setVoice{
 
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
@@ -22,9 +23,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextMainFragment fragmentTextMain;
     ReplayFragment fragmentReplay;
     VoiceMainFragment fragmentVoiceMain;
+    SettingFragment fragmentSetting;
 
-    Button btnReplay, btn;
+    Button btnReplay, btnReport, btnSetting;
     ToggleButton btnToggle;
+
+    String voiceName;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +36,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         btnReplay = findViewById(R.id.btnReplay);
-        btn = findViewById(R.id.btn);
+        btnReport = findViewById(R.id.btnReport);
         btnToggle = findViewById(R.id.btnToggle);
+        btnSetting = findViewById(R.id.btn_setting);
 
         btnReplay.setOnClickListener(this);
-        btn.setOnClickListener(this);
+        btnReport.setOnClickListener(this);
         btnToggle.setOnClickListener(this);
+        btnSetting.setOnClickListener(this);
 
         fragmentTextMain = new TextMainFragment();
         fragmentReplay = new ReplayFragment();
         fragmentVoiceMain = new VoiceMainFragment();
+        fragmentSetting = new SettingFragment();
 
-        setFrag(1);
-
+        setFrag(2);
     }
 
     private void setFrag(int n) {
@@ -54,22 +60,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (n){
             case 0:
                 transaction.replace(R.id.fragmentLayout, fragmentReplay);
-                transaction.commit();
                 break;
             case 1:
                 transaction.replace(R.id.fragmentLayout, fragmentTextMain);
-                transaction.commit();
                 break;
             case 2:
                 transaction.replace(R.id.fragmentLayout, fragmentVoiceMain);
-                transaction.commit();
                 break;
-            /*case 3:
-                transaction.replace(R.id.fragmentLayout, fragmentReplay);
-                transaction.commit();
-                break;*/
-
+            case 4:
+                transaction.replace(R.id.fragmentLayout, fragmentSetting);
+                break;
         }
+
+        if(voiceName != null){
+            Log.d("testasb" ,voiceName+"Acitivity 받았다");
+        }
+        Bundle bundle = new Bundle(1);
+        bundle.putString("voiceName", voiceName);
+        fragmentVoiceMain.setArguments(bundle);
+        transaction.commit();
     }
 
 
@@ -81,15 +90,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnToggle:
                 if(btnToggle.isChecked()){
-                    setFrag(2);
-                    break;
-                }else{
                     setFrag(1);
                     break;
+                }else{
+                    setFrag(2);
+                    break;
                 }
-            case R.id.btn:
-                setFrag(3);
+            case R.id.btnReport:
+                ReportDialog dialog = new ReportDialog();
+                dialog.show(fragmentManager, "fragment_dialog_test");
+
+                break;
+            case R.id.btn_setting:
+                setFrag(4);
                 break;
         }
+    }
+
+    @Override
+    public void setVoice(String voiceName) {
+        this.voiceName = voiceName;
     }
 }

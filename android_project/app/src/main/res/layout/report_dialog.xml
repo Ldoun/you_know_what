@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".ReportDialog">
+
+    <TextView
+        android:id="@+id/btnMoveReport"
+        android:layout_width="302dp"
+        android:layout_height="102dp"
+        android:background="@drawable/listview_row_background"
+        android:text="제보 창으로 이동할까요?"
+        android:gravity="center"
+        android:textColor="@color/colorTextDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnYes"
+        android:layout_width="141dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/listview_row_background"
+        android:text="Yes"
+        android:textColor="@color/colorTextDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnMoveReport" />
+
+    <Button
+        android:id="@+id/btnNo"
+        android:layout_width="141dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/listview_row_background"
+        android:text="No"
+        android:textColor="@color/colorTextDark"
+        app:layout_constraintStart_toEndOf="@+id/btnYes"
+        app:layout_constraintTop_toBottomOf="@+id/btnMoveReport" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

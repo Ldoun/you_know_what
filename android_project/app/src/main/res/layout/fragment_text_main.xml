@@ -11,16 +11,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <EditText
+            android:id="@+id/editText"
             android:padding="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/malgun"
-            android:text='"~에 대한 상식 알려줘 라고 입력해주세요'
+            android:hint='"~에 대한 상식 알려줘 라고 입력해주세요'
             android:textSize="25dp"
+            android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="120dp"
+            android:fontFamily="@font/malgun"
+            android:text="입력 완료"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

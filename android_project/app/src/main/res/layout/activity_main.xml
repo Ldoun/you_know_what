@@ -9,21 +9,26 @@
 
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btn_setting"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:text="설정?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/fragmentLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_setting">
+
+        <FrameLayout
+            android:id="@+id/fragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -50,7 +55,7 @@
             android:textOn="" />
 
         <Button
-            android:id="@+id/btn"
+            android:id="@+id/btnReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

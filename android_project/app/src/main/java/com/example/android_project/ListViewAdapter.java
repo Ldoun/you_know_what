@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,9 +14,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter implements View.OnClickListener{
 
     private TextView textView;
+    private Button btnSha, btnDel;
 
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
 
@@ -49,6 +51,11 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         textView = (TextView) convertView.findViewById(R.id.replayTextView);
+        /*btnSha = convertView.findViewById(R.id.btnSha);
+        btnDel = convertView.findViewById(R.id.btnDel);
+
+        btnSha.setOnClickListener(this);
+        btnDel.setOnClickListener(this);*/
 
         final ListViewItem listViewItem = listViewItemList.get(position);
 
@@ -76,4 +83,13 @@ public class ListViewAdapter extends BaseAdapter {
         listViewItemList.add(item);
     }
 
+    @Override
+    public void onClick(View view) {
+        /*switch (view.getId()){
+            case R.id.btnSha:
+                break;
+            case R.id.btnDel:
+                break;
+        }*/
+    }
 }

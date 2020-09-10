@@ -26,15 +26,17 @@
         android:background="@drawable/shape_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.522" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="로그인"
+        android:text="회원가입"
         android:textColor="#000000"
         android:textSize="25dp"
         android:fontFamily="@font/malgunbd"
@@ -48,67 +50,70 @@
         android:layout_height="37dp"
         android:layout_marginTop="16dp"
         android:background="#E8E5E5"
-        android:hint="ID or E-mail"
-        android:padding="10dp"
         android:fontFamily="@font/malgun"
+        android:hint="Email"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btnCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginEnd="41dp"
+        android:text="중복확인"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/editEMail" />
+
+    <TextView
+        android:id="@+id/textId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:text="(영문이나 숫자 6~12자)"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/editEMail" />
 
     <EditText
         android:id="@+id/editPW"
         android:layout_width="223dp"
         android:layout_height="37dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:background="#E8E5E5"
-        android:hint="Password"
-        android:padding="10dp"
         android:fontFamily="@font/malgun"
+        android:hint="password"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/editEMail" />
 
+    <TextView
+        android:id="@id/textPW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:text="(특수문자 포함 영문이나 숫자 8~12자)"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/editPW" />
+
     <Button
         android:id="@+id/btnSignup"
         android:layout_width="223dp"
         android:layout_height="37dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="73dp"
         android:background="#9EC5FF"
-        android:text="Login"
+        android:fontFamily="@font/malgunbd"
+        android:text="Sign up"
         android:textColor="#000000"
         android:textSize="23dp"
-        android:fontFamily="@font/malgunbd"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/editPW" />
-
-    <TextView
-        android:id="@+id/textSignUp"
-        android:layout_width="223dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="계정이 없으신가요?"
-        android:textColor="#000000"
-        android:textSize="12dp"
-        android:fontFamily="@font/malgunbd"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignup" />
-
-    <TextView
-        android:id="@+id/textPW"
-        android:layout_width="223dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="로그인이 안 되시나요?"
-        android:textColor="#000000"
-        android:textSize="12dp"
-        android:fontFamily="@font/malgunbd"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/textSignUp" />
+        app:layout_constraintTop_toBottomOf="@+id/editPW" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
