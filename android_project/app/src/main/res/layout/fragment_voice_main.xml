@@ -17,8 +17,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/malgun"
             android:padding="30dp"
-            android:text='"버튼을 누르고
-            ~에 대한 상식 알려줘 라고 입력해주세요'
+            android:text='"버튼을 누르고 ~에 대한 상식 알려줘 라고 입력해주세요'
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
