@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     String ipv4address = "common.stac-know.tk";
     String portnum = "5000";
 
-    String postUrl = "http://" + ipv4address + ":" + portnum + "/";
+    String postUrl = "https://" + ipv4address + ":" + portnum + "/";
 
     EditText editEmail, editPW;
     Button btnSignup, btnCheck;

@@ -1,6 +1,7 @@
 package com.example.android_project;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ReplayFragment extends Fragment {
     View view;
     String str;
@@ -41,6 +44,8 @@ public class ReplayFragment extends Fragment {
 
     String strEmail;
 
+    String UID;
+
     private ListView listView;
     private ListViewAdapter adapter;
 
@@ -50,6 +55,11 @@ public class ReplayFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_replay, container, false);
 
         adapter = new ListViewAdapter();
+
+        //여기 login id num
+        SharedPreferences sf = this.getActivity().getSharedPreferences("sFile",MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        UID = sf.getString("text","");
 
         listView= view.findViewById(R.id.listView);
         listView.setAdapter(adapter);
@@ -99,7 +109,8 @@ public class ReplayFragment extends Fragment {
         void revivew_requests(String id) throws JSONException {
             System.out.println("함");
             JSONObject json=new JSONObject();
-            json.put("id","27");
+            json.put("id",UID);
+            System.out.println("user:"+UID);
             mediaType = MediaType.parse("application/json");
             requestBody = RequestBody.create(json.toString(), mediaType);
             postRequest(requestBody,this.URL+"review");
@@ -159,14 +170,14 @@ public class ReplayFragment extends Fragment {
     }
 
     void review (String string){
-        //array = string.split(":");
+        array = string.split(":");
 
-        str = "안수빈,안수빈,안녕,하이,메롱";
-        array = str.split(",");
+        //str = "안수빈,안수빈,안녕,하이,메롱";
+        //array = str.split(",");
 
 //출력
-        for(int i=0;i<array.length;i++) {
-            adapter.addItem(array[i]);
+        for (String s : array) {
+            adapter.addItem(s);
         }
 
         adapter.addItem("트위터의 드립 문화를 일컫는 유행어. 글자 그대로 아무 말이나 마구 하는 모양새를 일컫는 말로, 아무렇게나 말을 내뱉기 편한 트위터의 특성을 그대로 표현하고 있다." +
@@ -177,7 +188,12 @@ public class ReplayFragment extends Fragment {
                 "그래서 좌우 논쟁은 일단 접어두고, 이번 사건이 갖고 있는 문제의 본질을 한번 따져보자. 내 색깔부터 밝힌다. 나는 테스트 해보나 마나 중도 보수 우파다. 우파지만 때로는 사안별로 좌파의 목소리에도 귀를 기울이는 유연성을 갖고 있다. 노무현 대통령이 한참 욕 먹고 있을 때도 그의 말에 귀울였었고, 그를 싫어하던 아내의 손을 이끌고 봉하마을도 다녀왔다." +
                 "본론으로 들어가서 이번 사건의 본질을 따지자면 나는 '기준과 선의 문제다' 라고 감히 단언한다. 군에서는 줄을 세우기 전에 기준부터 정한다. 그럼 기준되는 병사가 오른 손을 쳐들고 '기준!'하고 외치면 그에 따라 오와 열을 맞추어 정열을 하게 되는 것이다. 사회는 기준이 서야 질서가 유지되며 기준이 무너지면 질서가 무너지게 되어 있다. 기준은 기본이며 근본이며 원칙이며 윤리이고 법이기도 하다." +
                 "줄자에는 한쪽에 cm가 표기되어 있고, 다른 쪽에는 inch가 표기되어 있는데 경우에 따라 cm로 재다가 inch로 잰다면 어떻게 될까? 형평의 원리에 어긋나기  때문에 난리가 날 것이다. 내가 볼 때 지금이 꼭 그렇다. 국회, 언론, 검찰이 내부자가 되어 이중잣대를 들이밀며 세상을 재단하고 있는 것이다. 국회의원이 앞장서면 언론은 선동하고 검찰이 행동대장 역할을 하고 있는 꼴이다. 평정심을 잃은 정도가 아니라 제정신이 아닌 것 같다.");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
-        adapter.notifyDataSetChanged();
     }
 }

@@ -3,6 +3,7 @@ package com.example.android_project;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -40,6 +41,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class VoiceMainFragment extends Fragment {
     View view;
 
@@ -58,6 +61,7 @@ public class VoiceMainFragment extends Fragment {
     private RequestBody requestBody;
     private Button connect;
     private TextToSpeech tts;
+    String Usernum;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
@@ -77,6 +81,8 @@ public class VoiceMainFragment extends Fragment {
                     Manifest.permission.RECORD_AUDIO},PERMISSION);
         }
 
+
+        Toast.makeText(getContext(), Usernum, Toast.LENGTH_SHORT).show();
         textView = view.findViewById(R.id.sttResult);
         sttBtn = view.findViewById(R.id.sttStart);
 
