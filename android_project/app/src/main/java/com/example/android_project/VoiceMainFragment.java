@@ -2,7 +2,9 @@ package com.example.android_project;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -40,6 +42,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class VoiceMainFragment extends Fragment {
     View view;
 
@@ -49,15 +53,17 @@ public class VoiceMainFragment extends Fragment {
     TextView textView;
     final int PERMISSION = 1;
     String data;
-    String ipv4address = "54.210.63.142";
+    String ipv4address = "common.stac-know.tk";
     String portnum = "5000";
-    String postUrl = "http://" + ipv4address + ":" + portnum + "/";
+    String postUrl = "https://" + ipv4address + ":" + portnum + "/";
     String voiceName;
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
     private Button connect;
     private TextToSpeech tts;
+    String Usernum;
+    Context mContext;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
@@ -76,6 +82,11 @@ public class VoiceMainFragment extends Fragment {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.INTERNET,
                     Manifest.permission.RECORD_AUDIO},PERMISSION);
         }
+
+        this.mContext = getContext();
+        SharedPreferences sf = mContext.getSharedPreferences("sFile",mContext.MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        Usernum = sf.getString("text","");
 
         textView = view.findViewById(R.id.sttResult);
         sttBtn = view.findViewById(R.id.sttStart);
@@ -171,7 +182,7 @@ public class VoiceMainFragment extends Fragment {
                     break;
             }
 
-            Toast.makeText(getActivity().getApplicationContext(), "에러가 발생하였습니다. : " + message,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "에러가 발생하였습니다. : " + message,Toast.LENGTH_SHORT).show();
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -206,11 +217,22 @@ public class VoiceMainFragment extends Fragment {
     private RequestBody buildRequestBody(String msg) throws JSONException {
         postBodyString = msg;
         JSONObject json=new JSONObject();
-        json.put("email","1234@gmail.com");
+        json.put("usernum",Usernum);
         json.put("topic",msg);
         mediaType = MediaType.parse("application/json");
         requestBody = RequestBody.create(json.toString(), mediaType);
         return requestBody;
+    }
+
+    void tts(String str){
+        tts.speak(str,TextToSpeech.QUEUE_FLUSH,null);
+        Log.d("tts_true",str);
+       /* runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
 
 
@@ -227,7 +249,7 @@ public class VoiceMainFragment extends Fragment {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
+                /*VoiceMainFragment.this.runOnUiThread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void run() {
@@ -235,13 +257,15 @@ public class VoiceMainFragment extends Fragment {
                         Log.d("testasb",e.getMessage());
                         call.cancel();
                     }
-                });
+                });*/
 
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                getActivity().runOnUiThread(new Runnable() {
+
+                tts(response.body().string());
+              /*getActivity().runOnUiThread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void run() {
@@ -256,8 +280,7 @@ public class VoiceMainFragment extends Fragment {
                             Log.d("testasb","뿅");
                         }
                         }
-                });
-
+                });*/
 
             }
         });
