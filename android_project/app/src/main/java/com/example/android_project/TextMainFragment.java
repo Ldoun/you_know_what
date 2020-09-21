@@ -1,7 +1,9 @@
 package com.example.android_project;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,13 +43,19 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
     Button button;
     EditText editText;
     String data;
-    String ipv4address = "54.210.63.142";
+    String ipv4address = "common.stac-know.tk";
     String portnum = "5000";
-    String postUrl = "http://" + ipv4address + ":" + portnum + "/";
+    String postUrl = "https://" + ipv4address + ":" + portnum + "/";
+    TextToSpeech tts;
+
+    String Usernum;
+    Context mContext;
+
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +65,25 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
         button = view.findViewById(R.id.button);
 
         button.setOnClickListener(this);
+
+        this.mContext = getContext();
+        SharedPreferences sf = mContext.getSharedPreferences("sFile",mContext.MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        Usernum = sf.getString("text","");
+
+        tts=new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if(i==TextToSpeech.SUCCESS) {
+                    tts.setLanguage(Locale.KOREAN);
+                }
+                else{
+                    Toast.makeText(getContext(), "speech 객체 초기화 중 에러발생", Toast.LENGTH_SHORT).show();
+                }
+            }
+        },"com.google.android.tts");
+        tts.setPitch(1.0f);
+        tts.setSpeechRate(1.0f);
 
         return view;
     }
@@ -73,11 +101,22 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
     private RequestBody buildRequestBody(String msg) throws JSONException {
         postBodyString = msg;
         JSONObject json=new JSONObject();
-        json.put("email","1234@gmail.com");
+        json.put("usernum",Usernum);
         json.put("topic",msg);
         mediaType = MediaType.parse("application/json");
         requestBody = RequestBody.create(json.toString(), mediaType);
         return requestBody;
+    }
+
+    void tts(final String str){
+        tts.speak(str,TextToSpeech.QUEUE_FLUSH,null);
+        Log.d("tts_true",str);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                editText.setText(str);
+            }
+        });
     }
 
     private void postRequest(String message, String URL) throws JSONException {
@@ -93,7 +132,7 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
+                /*VoiceMainFragment.this.runOnUiThread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void run() {
@@ -101,31 +140,44 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
                         Log.d("testasb",e.getMessage());
                         call.cancel();
                     }
-                });
+                });*/
 
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                getActivity().runOnUiThread(new Runnable() {
+
+                tts(response.body().string());
+              /*getActivity().runOnUiThread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void run() {
                         try {
                             //Toast.makeText(getContext(), response.body().string(), Toast.LENGTH_LONG).show();
                             String str = response.body().string();
-                            editText.setHint(str);
-                            editText.setText("");
+                            tts.speak(str,TextToSpeech.QUEUE_FLUSH, null);
+                            textView.setText(str);
+                            Log.d("test","5");
                         } catch (IOException e) {
                             e.printStackTrace();
                             Log.d("testasb","뿅");
                         }
-                    }
-                });
-
+                        }
+                });*/
 
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
     }
 }
