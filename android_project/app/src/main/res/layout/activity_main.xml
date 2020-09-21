@@ -10,11 +10,13 @@
 
     <Button
         android:id="@+id/btn_setting"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:text="설정?"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/setting"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,7 +32,7 @@
             android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,25 +43,36 @@
 
         <Button
             android:id="@+id/btnReplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="버튼" />
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="42dp"
+            android:background="@drawable/replay_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ToggleButton
             android:id="@+id/btnToggle"
             android:layout_width="125dp"
             android:layout_height="56dp"
             android:background="@drawable/toggle_selector"
+            android:checked="false"
             android:textOff=""
-            android:textOn="" />
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnReport"
+            app:layout_constraintStart_toEndOf="@+id/btnReplay"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnReport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="버튼" />
-    </LinearLayout>
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/icon_j"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

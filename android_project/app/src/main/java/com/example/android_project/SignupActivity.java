@@ -1,18 +1,24 @@
 package com.example.android_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,11 +48,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     EditText editEmail, editPW;
     Button btnSignup, btnCheck;
     TextView textId, textPW;
-    
+
     String strEmail, strPW;
     boolean bEmail =false, bPW=false, bChecked=false;
     int checked=0;
     request request;
+
+    ConstraintLayout con1;
+    LinearLayout con2;
+    Animation animation;
+    ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +70,18 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         btnCheck = findViewById(R.id.btnCheck);
         textId = findViewById(R.id.textId);
         textPW = findViewById(R.id.textPW);
+        con1 = findViewById(R.id.con1);
+        con2 = findViewById(R.id.con2);
+        img = findViewById(R.id.sign_suc);
+
+        con1.setVisibility(View.VISIBLE);
+        con2.setVisibility(View.INVISIBLE);
 
         btnSignup.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
 
         request=new request(postUrl);
-        request.status=1;
+        request.status=5;
 
     }
 
@@ -92,10 +109,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     if(bEmail && bChecked && bPW){
                         try {
-                            request.requests(strEmail, strPW);
+                            request.requests(strPW, strEmail);
                             Toast.makeText(this, "통과", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -107,21 +122,21 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btnCheck:
                 bEmail = true;
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
-                        textId.setText("Email 형식이 아닙니다.");
-                        textId.setTextColor(Color.RED);
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
+                    textId.setText("Email 형식이 아닙니다.");
+                    textId.setTextColor(Color.RED);
+                }
+                else {
+                    textId.setTextColor(Color.LTGRAY);
+                    textId.setText("Email 형식이 맞습니다.");
+                    bEmail = true;
+                    try {
+                        request.check(strEmail);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        textId.setTextColor(Color.LTGRAY);
-                        textId.setText("Email 형식이 맞습니다.");
-                        bEmail = true;
-                        try {
-                            request.requests(strEmail);
-                            checked =1;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if(checked ==0){
+                    checked =1;
+                        /*if(checked ==0){
                             textId.setText("이미 존재하는 Email입니다.");
                             textId.setTextColor(Color.RED);
                         }
@@ -130,8 +145,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             textId.setText("중복 확인 완료");
                             bChecked = true;
                             btnCheck.setEnabled(false);
-                        }
-                    }
+                        }*/
+                }
                 break;
         }
     }
@@ -140,14 +155,65 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    void email_check(String msg){
+        if(msg.equals("fail")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textId.setText("이미 존재하는 아이디입니다.");
+                    textId.setTextColor(Color.RED);
+                }
+            });
+        }
+        else if(msg.equals("success")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textId.setTextColor(Color.LTGRAY);
+                    textId.setText("중복 확인 완료");
+                    bChecked = true;
+                    btnCheck.setEnabled(false);
+                    request.status=1;
+                    Log.d("testCh","성공임");
+                }
+            });
+        }
+    }
     void registerer(String str){
+        // UID 저장
         SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         editor.putString("text",str);
         editor.commit();
 
-        Log.d("registerer_true",str);
+        // email 저장
+        SharedPreferences shaEmail = getSharedPreferences("eFile", MODE_PRIVATE);
+        SharedPreferences.Editor Eeditor = shaEmail.edit();
+        Eeditor.putString("text",editEmail.getText().toString());
+        Eeditor.commit();
+
+        System.out.println(str+" register");
+        Log.d("TAG",str);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                con1.setVisibility(View.GONE);
+                con2.setVisibility(View.VISIBLE);
+                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sign_suc);
+                img.setAnimation(animation);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 3000);
+            }
+        });
 
     }
     public class request{
@@ -164,6 +230,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         String getter(){
             return result;
         }*/
+        public void check(String email) throws JSONException {
+            JSONObject json=new JSONObject();
+            json.put("email",email);
+            mediaType = MediaType.parse("application/json");
+            requestBody = RequestBody.create(json.toString(), mediaType);
+            postRequest(requestBody,this.URL+"email");
+        }
         public void requests(String msg) throws JSONException {
 
             JSONObject json=new JSONObject();
@@ -174,16 +247,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             requestBody = RequestBody.create(json.toString(), mediaType);
             System.out.println(URL);
             postRequest(requestBody,this.URL+"topic");
-            /*if(result!=null){
-                tts.speak(result,TextToSpeech.QUEUE_FLUSH, null);
-            }*/
-        }
-        void revivew_requests(String email) throws JSONException {
-            JSONObject json=new JSONObject();
-            json.put("email","1234@gmail.com");
-            mediaType = MediaType.parse("application/json");
-            requestBody = RequestBody.create(json.toString(), mediaType);
-            postRequest(requestBody,this.URL+"review");
             /*if(result!=null){
                 tts.speak(result,TextToSpeech.QUEUE_FLUSH, null);
             }*/
@@ -232,6 +295,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         registerer(response.body().string());
                     }else if(status==4){
                         review(response.body().string());
+                    }
+                    else if(status==5){
+                        email_check(response.body().string());
+                        Log.d("testCh","check");
                     }
 
                 }

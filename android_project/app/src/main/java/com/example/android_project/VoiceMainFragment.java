@@ -2,10 +2,12 @@ package com.example.android_project;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -52,9 +54,9 @@ public class VoiceMainFragment extends Fragment {
     TextView textView;
     final int PERMISSION = 1;
     String data;
-    String ipv4address = "54.210.63.142";
+    String ipv4address = "common.stac-know.tk";
     String portnum = "5000";
-    String postUrl = "http://" + ipv4address + ":" + portnum + "/";
+    String postUrl = "https://" + ipv4address + ":" + portnum + "/";
     String voiceName;
     private String postBodyString;
     private MediaType mediaType;
@@ -62,6 +64,21 @@ public class VoiceMainFragment extends Fragment {
     private Button connect;
     private TextToSpeech tts;
     String Usernum;
+    Context mContext;
+
+    /*@RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        this.mContext = getContext();
+        SharedPreferences sf = mContext.getSharedPreferences("sFile",mContext.MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        Usernum = sf.getString("text","");
+        //Usernum = String.valueOf(Integer.parseInt(Usernum)+1);
+
+        Log.d("TAG", Usernum+"onAttach");
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
@@ -82,7 +99,11 @@ public class VoiceMainFragment extends Fragment {
         }
 
 
-        Toast.makeText(getContext(), Usernum, Toast.LENGTH_SHORT).show();
+        this.mContext = getContext();
+        SharedPreferences sf = mContext.getSharedPreferences("sFile",mContext.MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        Usernum = sf.getString("text","");
+
         textView = view.findViewById(R.id.sttResult);
         sttBtn = view.findViewById(R.id.sttStart);
 
@@ -140,6 +161,7 @@ public class VoiceMainFragment extends Fragment {
         @Override
         public void onEndOfSpeech() {}
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onError(int error) {
             String message;
@@ -177,7 +199,7 @@ public class VoiceMainFragment extends Fragment {
                     break;
             }
 
-            Toast.makeText(getActivity().getApplicationContext(), "에러가 발생하였습니다. : " + message,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "에러가 발생하였습니다. : " + message,Toast.LENGTH_SHORT).show();
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -212,11 +234,22 @@ public class VoiceMainFragment extends Fragment {
     private RequestBody buildRequestBody(String msg) throws JSONException {
         postBodyString = msg;
         JSONObject json=new JSONObject();
-        json.put("email","1234@gmail.com");
+        json.put("usernum",Usernum);
         json.put("topic",msg);
         mediaType = MediaType.parse("application/json");
         requestBody = RequestBody.create(json.toString(), mediaType);
         return requestBody;
+    }
+
+    void tts(final String strtts){
+        tts.speak(strtts,TextToSpeech.QUEUE_FLUSH,null);
+        Log.d("tts_true",strtts);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(strtts);
+            }
+        });
     }
 
 
@@ -233,7 +266,7 @@ public class VoiceMainFragment extends Fragment {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
+                /*VoiceMainFragment.this.runOnUiThread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void run() {
@@ -241,30 +274,14 @@ public class VoiceMainFragment extends Fragment {
                         Log.d("testasb",e.getMessage());
                         call.cancel();
                     }
-                });
+                });*/
 
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                getActivity().runOnUiThread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.M)
-                    @Override
-                    public void run() {
-                        try {
-                            //Toast.makeText(getContext(), response.body().string(), Toast.LENGTH_LONG).show();
-                            String str = response.body().string();
-                            tts.speak(str,TextToSpeech.QUEUE_FLUSH, null);
-                            textView.setText(str);
-                            Log.d("test","5");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Log.d("testasb","뿅");
-                        }
-                        }
-                });
 
-
+                tts(response.body().string());
             }
         });
 

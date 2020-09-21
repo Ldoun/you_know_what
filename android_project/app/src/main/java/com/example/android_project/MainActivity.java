@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentSetting = new SettingFragment();
 
         setFrag(2);
+
+
     }
 
     private void setFrag(int n) {
