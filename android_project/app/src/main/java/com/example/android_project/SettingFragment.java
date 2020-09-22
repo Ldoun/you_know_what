@@ -201,11 +201,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
                                 eEditor.commit();
                                 pEditor.commit();
                                 uEditor.commit();
+                                getActivity().finish();
                             }
                         })
                         .setNegativeButton("아니요",null)
                 .show();
-                getActivity().finish();
                 break;
             case R.id.btnDeviceid:
                 deviceid = editDeviceid.getText().toString();
