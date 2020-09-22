@@ -1,10 +1,13 @@
 package com.example.android_project;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,12 +15,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android_project.ReplayFragment;
+
 import java.util.ArrayList;
 
-public class ListViewAdapter extends BaseAdapter implements View.OnClickListener{
+public class ListViewAdapter extends BaseAdapter{
 
     private TextView textView;
-    private Button btnSha, btnDel;
+    static Integer posi;
+    ReplayFragment replayFragment = new ReplayFragment();
 
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
 
@@ -71,9 +77,18 @@ public class ListViewAdapter extends BaseAdapter implements View.OnClickListener
                 replayDialog.setCancelable(true);
                 replayDialog.getWindow().setGravity(Gravity.CENTER);
                 replayDialog.show();
+
+                Log.d("testDel","선택됨:   "+pos);
+                posi= pos;
+                Log.d("testDel",posi+"하하");
             }
         });
+
         return convertView;
+    }
+
+    public Integer getPosi(){
+        return posi;
     }
 
     public void addItem(String text) {
@@ -83,13 +98,15 @@ public class ListViewAdapter extends BaseAdapter implements View.OnClickListener
         listViewItemList.add(item);
     }
 
-    @Override
-    public void onClick(View view) {
-        /*switch (view.getId()){
-            case R.id.btnSha:
-                break;
-            case R.id.btnDel:
-                break;
-        }*/
+
+    public void delItem(){
+        Log.d("testDel","지움"+ getPosi());
+        if(getPosi() == null){
+            Log.d("testDel","빈값");
+        }
+        else {
+            Log.d("testDel", getPosi() +" 들어있음");
+            listViewItemList.remove(getPosi());
+        }
     }
 }

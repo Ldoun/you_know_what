@@ -13,6 +13,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android_project.ListViewAdapter;
+
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.message.template.ButtonObject;
@@ -24,6 +26,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.kakao.util.helper.log.Logger;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +34,6 @@ public class ReplayDialog extends Dialog {
     private TextView textCon, textDate;
     private Button btnSha, btnDel;
     private String strCon, strDate;
-
-    Intent intent;
 
     private View.OnClickListener clickSha, clickDel;
 
@@ -72,6 +73,7 @@ public class ReplayDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 Log.d("log.d", "Delete");
+                new ListViewAdapter().delItem();
                 dismiss();
             }
         };

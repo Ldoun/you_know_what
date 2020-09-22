@@ -2,6 +2,7 @@ package com.example.android_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,9 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     Button btnSignup;
     TextView textSignUp, textPW;
     String URL = "https://common.stac-know.tk:5000/";
+    String email,pw;
 
     RequestBody requestBody;
     request request = new request(URL);
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +53,12 @@ public class LoginActivity extends AppCompatActivity {
         textPW = findViewById(R.id.textPW);
         request.status = 2;
 
-
         btnSignup.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 try {
                     request.requests(editPW.getText().toString(),editEMail.getText().toString());
-                    Log.d("LOGIN","click");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

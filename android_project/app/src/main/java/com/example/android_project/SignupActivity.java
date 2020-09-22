@@ -188,9 +188,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         // email 저장
         SharedPreferences shaEmail = getSharedPreferences("eFile", MODE_PRIVATE);
-        SharedPreferences.Editor Eeditor = shaEmail.edit();
-        Eeditor.putString("text",editEmail.getText().toString());
-        Eeditor.commit();
+        SharedPreferences.Editor eEditor = shaEmail.edit();
+        eEditor.putString("text",editEmail.getText().toString());
+        eEditor.commit();
+
+        // PW 저장
+        SharedPreferences shaPW = getSharedPreferences("pFile",MODE_PRIVATE);
+        SharedPreferences.Editor pEditor = shaPW.edit();
+        pEditor.putString("text", editPW.getText().toString());
+        pEditor.commit();
 
         System.out.println(str+" register");
         Log.d("TAG",str);

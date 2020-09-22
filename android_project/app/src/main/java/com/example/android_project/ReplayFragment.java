@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class ReplayFragment extends Fragment {
     String strEmail;
 
     String UID;
+    int posi;
 
     private ListView listView;
     private ListViewAdapter adapter;
@@ -64,6 +66,15 @@ public class ReplayFragment extends Fragment {
         listView= view.findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                posi = position;
+                //Log.d("testDel","선택됨"+posi);
+                System.out.println("선택됨: "+posi);
+            }
+        });
+
         request = new request(postUrl);
         request.status=4;
         try {
@@ -76,6 +87,10 @@ public class ReplayFragment extends Fragment {
     }
     void tts(String str){
 
+    }
+
+    public int getPosi(){
+        return posi;
     }
 
     public class request{
