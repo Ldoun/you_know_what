@@ -1,7 +1,9 @@
 package com.example.android_project;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
@@ -177,9 +179,33 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
         setVoice = null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogout:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("로그아웃 하시겠습니까?")
+                        .setMessage("로그아웃시 자동로그인 기능이 사라집니다.")
+                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences sf = mContext.getSharedPreferences("eFile",mContext.MODE_PRIVATE);
+                                SharedPreferences.Editor eEditor = sf.edit();
+                                eEditor.clear();
+                                SharedPreferences sfp = mContext.getSharedPreferences("pFile",mContext.MODE_PRIVATE);
+                                SharedPreferences.Editor pEditor = sfp.edit();
+                                pEditor.clear();
+                                SharedPreferences sfu = mContext.getSharedPreferences("sFile", mContext.MODE_PRIVATE);
+                                SharedPreferences.Editor uEditor = sfu.edit();
+                                uEditor.clear();
+                                eEditor.commit();
+                                pEditor.commit();
+                                uEditor.commit();
+                            }
+                        })
+                        .setNegativeButton("아니요",null)
+                .show();
+                getActivity().finish();
                 break;
             case R.id.btnDeviceid:
                 deviceid = editDeviceid.getText().toString();

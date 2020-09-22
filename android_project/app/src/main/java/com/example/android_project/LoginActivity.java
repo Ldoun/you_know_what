@@ -113,11 +113,23 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
         else {
-            SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+            // UID 저장
+            SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putString("text", str);
+            editor.putString("text",str);
             editor.commit();
+
+            // email 저장
+            SharedPreferences shaEmail = getSharedPreferences("eFile", MODE_PRIVATE);
+            SharedPreferences.Editor eEditor = shaEmail.edit();
+            eEditor.putString("text",editEMail.getText().toString());
+            eEditor.commit();
+
+            // PW 저장
+            SharedPreferences shaPW = getSharedPreferences("pFile",MODE_PRIVATE);
+            SharedPreferences.Editor pEditor = shaPW.edit();
+            pEditor.putString("text", editPW.getText().toString());
+            pEditor.commit();
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
