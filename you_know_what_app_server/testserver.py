@@ -19,6 +19,15 @@ stac=pymysql.connect(
      )
 cursor=stac.cursor()
 
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    from_android=request.data.decode("utf-8")
+    user=json.loads(from_android)
+    sql="delete from presaw where uid="+user['uid']+"and script ='"+user['tip']+"';"
+    cursor.execute(sql)
+    stac.commit()
+    return ""
+
 @app.route('/email', methods=['GET', 'POST'])
 def check():
     from_android=request.data.decode("utf-8")
@@ -47,6 +56,7 @@ def link():
 def login():
     from_android=request.data.decode("utf-8")
     user=json.loads(from_android)
+    print(user)
     sql="select `index` from `user` where `email` = '"+user['email']+"' and `password`='"+user['pwd']+"';" 
     cursor.execute(sql)
     result=cursor.fetchone()
@@ -55,7 +65,7 @@ def login():
         print(result[0])
         return str(result[0])
     else:
-        return "failed" 
+        return "0" 
 
 @app.route('/register', methods=['GET', 'POST'])
 def regi():
@@ -78,14 +88,18 @@ def topic_tip():
     from_android=request.data.decode("utf-8")
     user=json.loads(from_android)
     subject=okt.nouns(user["topic"])[0]    
-    if(subject=="상식" or subject=="랜덤" or subject==""):
-        tip= get_tip()
+    if(subject=="상식" or subject=="랜덤" or subject=="램덤" or subject==""):
+        tip= get_random_tip()
     else:
-        sql="select script from tip where script LIKE '%"+subject+"%';"
-        cursor.execute(sql)
-        result=cursor.fetchall()
-        print(user)
-        tip=random.choice(result)[0]
+        try:
+            sql="select script from tip where script LIKE '%"+subject+"%';"
+            cursor.execute(sql)
+            result=cursor.fetchall()
+            print(user)
+            tip=random.choice(result)[0]
+        except:
+            return "해당하는 상식 없음"
+    print(tip)
     sql="insert into presaw(uid, script, date) values('"+user['usernum']+"','"+tip+"', now());"
     cursor.execute(sql)
     stac.commit()
@@ -100,24 +114,36 @@ def handle():
     sql='select script from presaw where `uid`="'+uid+'";'
     cursor.execute(sql)
     result=cursor.fetchall()
-    return list2String(resulti)
+    return list2String(result)
 
 @app.route('/Topic_tip_v2', methods=['POST'])
 def one_tip():
     req_json = request.json
-        print(req_json)
-        #tips = get_Tips
-        tips=get_topic_tip(req_json['action']['parameters']['Topic']['value'])
-        response = {
-                "version": "2.0",
-                "resultCode": "OK",
-                "output": {
-                    "Topic" : req_json['action']['parameters']['Topic']['value'],
-                    "tip":tips
-                    },
-                "directives": []
-                }
+    print(req_json)
+    #tips = get_Tips
+    tips=get_topic_tip(req_json['action']['parameters']['Topic']['value'])
+    response = {
+    "version": "2.0",
+    "resultCode": "OK",
+    "output": {
+        "Topic" : req_json['action']['parameters']['Topic']['value'],
+        "tip":tips
+        },
+    "directives": []
+    }
+    sql="select `uid` from device where device='"+req_json['profile']['privatePlay']['deviceUniqueId']+"';"
+    cursor.execute(sql)
+    try:
+        uid=cursor.fetchone()[0]
+    except:
         return jsonify(response)
+
+    print(uid)
+    if(uid):
+        sql="insert into presaw(uid, script, date) values("+str(uid)+",'"+tips+"', now());"
+        cursor.execute(sql)
+        stac.commit()   
+    return jsonify(response)
     
 @app.route('/Topic_tip', methods=['POST'])
 def Topic_tip():
@@ -204,17 +230,28 @@ def get_topic_tip(subject):
     tip = random.choice(result)[0]
     return tip
 
+def get_random_tip():
+    tip_count=10
+    i=random.range(1,10)
+    sql="select script from tip where num="+str(i)+";"
+    cursor.execute(sql)
+    tip=cursor.fetchone()[0]
+    print(tip)
+    return tip
+
 #for random
 def get_tip():
     tip_count=9
+    tips=[]
     i=range(1,tip_count+1)
     tip_id=random.sample(i,3)
     for  i in range(3):
-        sql="select script from tip where num="+tip_id[i]+";"
+        sql="select script from tip where num="+str(tip_id[i])+";"
         cursor.execute(sql)
-    result=cursor.fetchall()
-    print(result)
-    return result
+        tips.append(cursor.fetchall()[0])
+    
+    print(tips)
+    return tips
 
 if __name__=="__main__":
     ssl_context=ssl.SSLContext(ssl.PROTOCOL_TLS)
