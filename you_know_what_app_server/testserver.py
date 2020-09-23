@@ -232,7 +232,7 @@ def get_topic_tip(subject):
 
 def get_random_tip():
     tip_count=10
-    i=random.range(1,10)
+    i=random.randint(1,10)
     sql="select script from tip where num="+str(i)+";"
     cursor.execute(sql)
     tip=cursor.fetchone()[0]
