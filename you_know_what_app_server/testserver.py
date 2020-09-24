@@ -23,7 +23,8 @@ cursor=stac.cursor()
 def delete():
     from_android=request.data.decode("utf-8")
     user=json.loads(from_android)
-    sql="delete from presaw where uid="+user['uid']+"and script ='"+user['tip']+"';"
+    print(user)
+    sql="delete from presaw where uid="+user['uid']+" and script ='"+user['tip']+"';"
     cursor.execute(sql)
     stac.commit()
     return ""
