@@ -232,8 +232,8 @@ def get_topic_tip(subject):
     return tip
 
 def get_random_tip():
-    tip_count=10
-    i=random.randint(1,10)
+    tip_count=1
+    i=random.randint(35,76)
     sql="select script from tip where num="+str(i)+";"
     cursor.execute(sql)
     tip=cursor.fetchone()[0]
@@ -242,9 +242,9 @@ def get_random_tip():
 
 #for random
 def get_tip():
-    tip_count=9
+    tip_count=75
     tips=[]
-    i=range(1,tip_count+1)
+    i=range(35,tip_count+1)
     tip_id=random.sample(i,3)
     for  i in range(3):
         sql="select script from tip where num="+str(tip_id[i])+";"
