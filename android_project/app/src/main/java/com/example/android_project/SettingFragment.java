@@ -9,16 +9,13 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.speech.tts.Voice;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,12 +43,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
     String postUrl = "https://" + ipv4address + ":" + portnum + "/";
     request request;
 
-    private MediaType mediaType;
-    private RequestBody requestBody;
-
-    Spinner spinner;
-    AdapterSpinner adapterSpinner;
-    SeekBar seekBar;
+    SeekBar seekSound;
+    static SeekBar seekPitch;
+    static SeekBar seekRate;
     AudioManager audioManager;
     EditText editDeviceid;
     Button btnLogout, btnDeviceid;
@@ -62,23 +54,37 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
     String deviceid;
     String vo;
     int nMax, nCurrentVolumn;
-    setVoice setVoice;
     boolean flag = true;
 
     String UID;
     String Email;
     Context mContext;
 
+    static float pitch=0.5f;
+    static float speachRate=0.5f;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_setting, container, false);
-        
-        spinner = view.findViewById(R.id.spinner);
+
         btnLogout = view.findViewById(R.id.btnLogout);
         btnDeviceid = view.findViewById(R.id.btnDeviceid);
         editDeviceid = view.findViewById(R.id.editDeviceid);
         textEmail = view.findViewById(R.id.textEmail);
+        seekSound = view.findViewById(R.id.seekSound);
+        seekPitch = view.findViewById(R.id.seekPitch);
+        seekRate = view.findViewById(R.id.seekRate);
+
+        seekPitch.setProgress(50);
+        seekRate.setProgress(50);
+        seekPitch.setMax(100);
+        seekRate.setMax(100);
+
+        pitch = seekPitch.getProgress();
+        speachRate = seekRate.getProgress();
+
+
 
         btnDeviceid.setOnClickListener(this);
         btnLogout.setOnClickListener(this);
@@ -86,16 +92,50 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
         request=new request(postUrl);
         request.status=5;
 
-        seekBar = view.findViewById(R.id.seekSound);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         nMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         nCurrentVolumn = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        seekBar.setMax(nMax);
-        seekBar.setProgress(nCurrentVolumn);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekSound.setMax(nMax);
+        seekSound.setProgress(nCurrentVolumn);
+        seekSound.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                pitch = i;
+                Log.d("RATE",String.valueOf(pitch));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                speachRate = i;
+                Log.d("RATE",String.valueOf(speachRate));
             }
 
             @Override
@@ -120,63 +160,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
         Log.d("testDeviceid", Email+" email");
         textEmail.setText(Email);
 
-        ArrayList<String> voice = new ArrayList<>();
-        voice.add("dlehdns");
-        voice.add("wjdalswn");
-        voice.add("qkrtjdfo");
-        voice.add("dkstnqls");
-        voice.add("cjswndgh");
-        
-        adapterSpinner = new AdapterSpinner(getContext(), voice);
-        spinner.setAdapter(adapterSpinner);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                //Toast.makeText(getContext(), (String)spinner.getItemAtPosition(position)+"이 선택되었습니다.", Toast.LENGTH_SHORT).show();
-                switch (position){
-                    case 0:
-                        vo = "dlehdns";
-                        break;
-                    case 1:
-                        vo = "wjdalswn";
-                        break;
-                    case 2:
-                        vo = "qkrtjdfo";
-                        break;
-                    case 3:
-                        vo = "dkstnqls";
-                        break;
-                    case 4:
-                        vo = "cjswndgh";
-                        break;
-                }
-                setVoice.setVoice(vo);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof setVoice){
-            setVoice = (setVoice) context;
-        } else {
-            throw new RuntimeException(context.toString()+" must implement setVoice");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        setVoice = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -218,10 +212,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
                 break;
 
         }
-    }
-
-    public interface setVoice {
-        void setVoice(String voiceName);
     }
 
     public class request{
@@ -293,5 +283,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener{
     }
     void review (String str){
 
+    }
+
+    static public float getPitch(){
+        return pitch;
+    }
+    static public float getSpeachRate(){
+        return speachRate;
     }
 }

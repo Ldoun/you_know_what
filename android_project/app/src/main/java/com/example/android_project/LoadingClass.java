@@ -64,7 +64,7 @@ public class LoadingClass extends Activity {
 
         if(email != null && pw !=null){
             try {
-                Toast.makeText(mContext, email+"로 자동 로그인중", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, email+"로 자동 로그인 중", Toast.LENGTH_SHORT).show();
                 request.requests(pw,email);
                 login = true;
             } catch (JSONException e) {

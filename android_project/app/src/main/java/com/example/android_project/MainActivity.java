@@ -13,9 +13,8 @@ import android.widget.Button;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SettingFragment.setVoice{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btnReplay, btnReport, btnSetting;
     ToggleButton btnToggle;
-
-    String voiceName;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
-        if(voiceName != null){
-            Log.d("testasb" ,voiceName+"Acitivity 받았다");
-        }
-        Bundle bundle = new Bundle(1);
-        bundle.putString("voiceName", voiceName);
-        fragmentVoiceMain.setArguments(bundle);
         transaction.commit();
     }
 
@@ -107,10 +98,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setFrag(4);
                 break;
         }
-    }
-
-    @Override
-    public void setVoice(String voiceName) {
-        this.voiceName = voiceName;
     }
 }

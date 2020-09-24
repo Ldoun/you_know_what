@@ -24,8 +24,9 @@ public class ListViewAdapter extends BaseAdapter{
     private TextView textView;
     static Integer posi;
     ReplayFragment replayFragment = new ReplayFragment();
+    static String cuText;
 
-    private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
+    static private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
 
     public ListViewAdapter(){
 
@@ -67,6 +68,9 @@ public class ListViewAdapter extends BaseAdapter{
 
         textView.setText(listViewItem.getText());
 
+        cuText = listViewItem.getText();
+        Log.d("TIP",cuText+"텍스트");
+
         LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.linearLayout);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,8 +91,15 @@ public class ListViewAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public Integer getPosi(){
-        return posi;
+
+    public String getPosi(){
+        Log.d("TIP",cuText+ " getPosi()");
+        return cuText;
+    }
+
+    public void setPosi(String cuText){
+        this.cuText = cuText;
+        Log.d("TIP","cuText "+cuText);
     }
 
     public void addItem(String text) {
@@ -99,14 +110,4 @@ public class ListViewAdapter extends BaseAdapter{
     }
 
 
-    public void delItem(){
-        Log.d("testDel","지움"+ getPosi());
-        if(getPosi() == null){
-            Log.d("testDel","빈값");
-        }
-        else {
-            Log.d("testDel", getPosi() +" 들어있음");
-            listViewItemList.remove(getPosi());
-        }
-    }
 }

@@ -43,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.content.Context.MODE_PRIVATE;
+import com.example.android_project.SettingFragment;
 
 public class VoiceMainFragment extends Fragment {
     View view;
@@ -66,6 +66,8 @@ public class VoiceMainFragment extends Fragment {
     String Usernum;
     Context mContext;
 
+    SettingFragment settingFragment;
+
     /*@RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onAttach(Context context) {
@@ -85,12 +87,6 @@ public class VoiceMainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_voice_main, container, false);
-
-        Bundle bundle = getArguments();
-        if(bundle !=null){
-            voiceName = getArguments().getString("voiceName");
-            Log.d("testasb",voiceName+"입니당");
-        }
 
         if ( Build.VERSION.SDK_INT >= 23 ){
             // 퍼미션 체크
@@ -131,14 +127,8 @@ public class VoiceMainFragment extends Fragment {
                 }
             }
         },"com.google.android.tts");
-        tts.setPitch(1.0f);
-        tts.setSpeechRate(2.0f);
-        /*Set<String> a = new HashSet<>();
-        a.add("female");
-        Voice voice = new Voice("en-us-x-sfg#female_2-local", new Locale("en","KOREA"), 400,200, true, a);
-        tts.setVoice(voice);
-        Log.d("testasb",tts.getVoices().toString());*/
-        //tts.getDefaultEngine();
+        tts.setPitch(settingFragment.getPitch()/50);
+        tts.setSpeechRate(settingFragment.getSpeachRate()/50);
         return view;
     }
 

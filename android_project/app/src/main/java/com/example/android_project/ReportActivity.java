@@ -30,7 +30,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        brower.loadUrl("https://docs.google.com/forms/d/e/1FAIpQLSdC3GBap3Vc0kRQpH61nFTXvRebg7yFURhAzl96SNdfAkgadw/viewform?usp=sf_link");
+        brower.loadUrl("https://docs.google.com/forms/d/e/1FAIpQLSe-jJLQDt7Vju9s9IwJdDKrmbrs6gsB8LuwbhhPHhbKyzb_MA/viewform");
         brower.setWebViewClient(new WebViewClient());
 
         settings = brower.getSettings();

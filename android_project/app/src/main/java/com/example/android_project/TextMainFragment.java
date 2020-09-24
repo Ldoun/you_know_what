@@ -37,8 +37,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import com.example.android_project.SettingFragment;
+
 public class TextMainFragment extends Fragment implements View.OnClickListener{
     View view;
+
+    SettingFragment settingFragment;
 
     Button button;
     EditText editText;
@@ -82,11 +86,16 @@ public class TextMainFragment extends Fragment implements View.OnClickListener{
                 }
             }
         },"com.google.android.tts");
-        tts.setPitch(1.0f);
-        tts.setSpeechRate(1.0f);
+        tts.setPitch(settingFragment.getPitch()/50);
+        tts.setSpeechRate(settingFragment.getSpeachRate()/50);
+
+        Log.d("RATE", String.valueOf(settingFragment.getPitch())+"pitch");
+        Log.d("RATE", String.valueOf(settingFragment.getSpeachRate())+"rate");
 
         return view;
     }
+
+
 
     @Override
     public void onClick(View view) {
